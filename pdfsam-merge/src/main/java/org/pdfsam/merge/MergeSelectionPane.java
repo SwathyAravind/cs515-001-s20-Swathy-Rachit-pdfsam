@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.pdfsam.i18n.DefaultI18nContext;
+import org.pdfsam.support.params.ConversionUtils;
 import org.pdfsam.support.params.TaskParametersBuildStep;
 import org.pdfsam.ui.selection.multiple.FileColumn;
 import org.pdfsam.ui.selection.multiple.IntColumn;
@@ -57,9 +58,17 @@ public class MergeSelectionPane extends MultipleSelectionPane
     @Override
     public void apply(MergeParametersBuilder builder, Consumer<String> onError) {
         try {
+
             table().getItems().stream().filter(s -> !Objects.equals("0", trim(s.pageSelection.get())))
-                    .map(i -> new PdfMergeInput(i.descriptor().toPdfFileSource(), i.toPageRangeSet()))
-                    .forEach(builder::addInput);
+                .forEach( ( i ) -> {
+                    String [] ranges = i.currentPageSelection().split(",");
+
+                    for( String r: ranges ) {
+                        if( r.length() > 0 ) {
+                            builder.addInput( new PdfMergeInput(i.descriptor().toPdfFileSource(), ConversionUtils.toPageRangeSet(r)) );
+                        }
+                    } }
+                );
             if (!builder.hasInput()) {
                 onError.accept(DefaultI18nContext.getInstance().i18n("No PDF document has been selected"));
             }

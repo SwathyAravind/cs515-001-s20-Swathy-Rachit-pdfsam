@@ -74,4 +74,10 @@ public final class SelectionTableRowData {
         return ConversionUtils.toPageRangeSet(pageSelection.get());
     }
 
+    /**
+     * @return the {@link String} of the page ranges for the input raw in the table.
+     */
+    public String currentPageSelection() {
+        return pageSelection.get();
+    }
 }
