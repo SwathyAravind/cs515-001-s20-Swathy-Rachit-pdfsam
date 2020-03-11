@@ -65,10 +65,12 @@ public class MergeSelectionPane extends MultipleSelectionPane
                     for( String r: ranges ) {
                         if( r.length() > 0 ) {
                             builder.addInput( new PdfMergeInput(i.descriptor().toPdfFileSource(), ConversionUtils.toPageRangeSet(r)) );
+                        } else {
+                            builder.addInput( new PdfMergeInput(i.descriptor().toPdfFileSource(), i.toPageRangeSet()) );
                         }
-                    } }
-                );
-
+                    }
+                }
+            );
             if (!builder.hasInput()) {
                 onError.accept(DefaultI18nContext.getInstance().i18n("No PDF document has been selected"));
             }
