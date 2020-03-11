@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.pdfsam.splitbysize;
-import java.math.BigDecimal;
 
 import org.pdfsam.i18n.DefaultI18nContext;
 
