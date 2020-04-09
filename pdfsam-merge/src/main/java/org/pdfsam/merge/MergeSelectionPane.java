@@ -18,25 +18,20 @@
  */
 package org.pdfsam.merge;
 
-import static org.apache.commons.lang3.StringUtils.trim;
-
-import java.util.Objects;
-import java.util.function.Consumer;
-
 import org.pdfsam.i18n.DefaultI18nContext;
+import org.pdfsam.pdf.PdfDocumentDescriptor;
 import org.pdfsam.support.params.ConversionUtils;
 import org.pdfsam.support.params.TaskParametersBuildStep;
-import org.pdfsam.ui.selection.multiple.FileColumn;
-import org.pdfsam.ui.selection.multiple.IntColumn;
-import org.pdfsam.ui.selection.multiple.LoadingColumn;
-import org.pdfsam.ui.selection.multiple.LongColumn;
-import org.pdfsam.ui.selection.multiple.MultipleSelectionPane;
-import org.pdfsam.ui.selection.multiple.PageRangesColumn;
-import org.pdfsam.ui.selection.multiple.SelectionTableColumn;
+import org.pdfsam.ui.selection.multiple.*;
 import org.sejda.conversion.exception.ConversionException;
 import org.sejda.model.input.PdfMergeInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import static org.apache.commons.lang3.StringUtils.trim;
 
 /**
  * Selection panel for the merge module.
@@ -58,19 +53,19 @@ public class MergeSelectionPane extends MultipleSelectionPane
     @Override
     public void apply(MergeParametersBuilder builder, Consumer<String> onError) {
         try {
-            table().getItems().stream().filter(s -> !Objects.equals("0", trim(s.pageSelection.get())))
-                .forEach( ( i ) -> {
-                    String [] ranges = i.currentPageSelection().split(",");
-
-                    for( String r: ranges ) {
-                        if( r.length() > 0 ) {
-                            builder.addInput( new PdfMergeInput(i.descriptor().toPdfFileSource(), ConversionUtils.toPageRangeSet(r)) );
+            for( SelectionTableRowData selectionData : table().getItems() ) {
+                if (!Objects.equals("0", trim(selectionData.pageSelection.get()))) {
+                    String[] ranges = selectionData.currentPageSelection().split(",");
+                    for (String r : ranges) {
+                        PdfDocumentDescriptor pdfDocDes = selectionData.descriptor();
+                        if (r.length() > 0) {
+                            builder.addInput(new PdfMergeInput(pdfDocDes.toPdfFileSource(), ConversionUtils.toPageRangeSet(r)));
                         } else {
-                            builder.addInput( new PdfMergeInput(i.descriptor().toPdfFileSource(), i.toPageRangeSet()) );
+                            builder.addInput(new PdfMergeInput(pdfDocDes.toPdfFileSource(), selectionData.toPageRangeSet()));
                         }
                     }
                 }
-            );
+            }
             if (!builder.hasInput()) {
                 onError.accept(DefaultI18nContext.getInstance().i18n("No PDF document has been selected"));
             }

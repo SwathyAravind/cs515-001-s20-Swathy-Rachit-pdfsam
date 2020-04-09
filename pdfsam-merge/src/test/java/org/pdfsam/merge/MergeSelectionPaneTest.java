@@ -23,11 +23,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 import java.io.File;
@@ -99,12 +95,12 @@ public class MergeSelectionPaneTest {
     public void notEmptyPageSelection() throws Exception {
         populate();
         when(builder.hasInput()).thenReturn(Boolean.TRUE);
-        victim.table().getItems().get(0).pageSelection.set("1,3-10");
+        victim.table().getItems().get(0).pageSelection.set("1,3-10,6");
         victim.apply(builder, onError);
         verify(onError, never()).accept(anyString());
         ArgumentCaptor<PdfMergeInput> input = ArgumentCaptor.forClass(PdfMergeInput.class);
-        verify(builder).addInput(input.capture());
-        assertEquals(2, input.getValue().getPageSelection().size());
+        verify(builder, times(3)).addInput(input.capture());
+        assertEquals(1, input.getValue().getPageSelection().size());
     }
 
     @Test
