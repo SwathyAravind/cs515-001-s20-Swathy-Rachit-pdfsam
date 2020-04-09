@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.pdfsam.splitbysize;
-import java.math.BigDecimal;
 
 import org.pdfsam.i18n.DefaultI18nContext;
 
@@ -31,8 +30,6 @@ public enum SizeUnit {
     MEGABYTE(DefaultI18nContext.getInstance().i18n("Megabytes"), DefaultI18nContext.getInstance().i18n("MB")) {
         @Override
         public long toBytes(int raw) {
-            /*BigDecimal value = new BigDecimal(raw);
-            return value.multiply(new BigDecimal(1000 * 1000 )).longValue();*/
             return KILOBYTE.toBytes(raw) * 1000;
         }
     },
@@ -40,8 +37,6 @@ public enum SizeUnit {
         @Override
         public long toBytes(int raw) {
             return raw * 1000;
-            /*BigDecimal value = new BigDecimal(raw);
-            return value.multiply(new BigDecimal(1000 )).longValue();*/
         }
     };
 
