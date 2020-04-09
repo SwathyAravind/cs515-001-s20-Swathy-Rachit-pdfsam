@@ -18,19 +18,21 @@
  */
 package org.pdfsam.splitbysize;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Andrea Vacondio
  *
  */
 public class SizeUnitTest {
+    private static final long KB_TO_BYTES = 1000;
+    private static final int sizeToSplitAt = 5;
 
     @Test
     public void toBytes() {
-        assertEquals(5 * 1000, SizeUnit.KILOBYTE.toBytes(5));
-        assertEquals(5 * 1000 * 1000, SizeUnit.MEGABYTE.toBytes(5));
+        assertEquals(sizeToSplitAt * KB_TO_BYTES, SizeUnit.KILOBYTE.toBytes( sizeToSplitAt ));
+        assertEquals(sizeToSplitAt * KB_TO_BYTES * KB_TO_BYTES, SizeUnit.MEGABYTE.toBytes( sizeToSplitAt ));
     }
 }

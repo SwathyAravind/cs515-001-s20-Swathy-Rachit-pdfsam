@@ -18,13 +18,6 @@
  */
 package org.pdfsam.splitbysize;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -34,6 +27,13 @@ import org.sejda.model.output.FileOrDirectoryTaskOutput;
 import org.sejda.model.parameter.SplitBySizeParameters;
 import org.sejda.model.pdf.PdfVersion;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+
 /**
  * @author Andrea Vacondio
  *
@@ -41,6 +41,7 @@ import org.sejda.model.pdf.PdfVersion;
 public class SplitBySizeParametersBuilderTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
+    private static final long sizeToSplitAt = 30;
 
     @Test
     public void build() throws IOException {
@@ -49,7 +50,7 @@ public class SplitBySizeParametersBuilderTest {
         FileOrDirectoryTaskOutput output = mock(FileOrDirectoryTaskOutput.class);
         victim.output(output);
         victim.existingOutput(ExistingOutputPolicy.OVERWRITE);
-        victim.size(120l);
+        victim.size(sizeToSplitAt);
         victim.prefix("prefix");
         victim.discardBookmarks(true);
         File file = folder.newFile("my.pdf");
@@ -61,7 +62,7 @@ public class SplitBySizeParametersBuilderTest {
         assertTrue(params.discardOutline());
         assertEquals(ExistingOutputPolicy.OVERWRITE, params.getExistingOutputPolicy());
         assertEquals(PdfVersion.VERSION_1_7, params.getVersion());
-        assertEquals(120l, params.getSizeToSplitAt());
+        assertEquals(sizeToSplitAt, params.getSizeToSplitAt());
         assertEquals("prefix", params.getOutputPrefix());
         assertEquals(output, params.getOutput());
         assertEquals(source, params.getSourceList().get(0));

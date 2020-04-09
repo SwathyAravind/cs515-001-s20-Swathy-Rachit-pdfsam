@@ -18,20 +18,10 @@
  */
 package org.pdfsam.splitbysize;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-
+import javafx.scene.Scene;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,10 +29,15 @@ import org.pdfsam.test.ClearEventStudioRule;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.scene.Scene;
-import javafx.scene.control.TextInputControl;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Andrea Vacondio
@@ -55,6 +50,7 @@ public class SplitOptionsPaneTest extends ApplicationTest {
     private SplitBySizeParametersBuilder builder;
     private Consumer<String> onError;
     private SplitOptionsPane victim;
+    private static final long KB_TO_BYTES = 1000;
 
     @Before
     public void setUp() {
@@ -72,11 +68,12 @@ public class SplitOptionsPaneTest extends ApplicationTest {
 
     @Test
     public void apply() {
-        clickOn("#sizeField").write("30").push(KeyCode.ENTER);
+        long sizeToSplitAt = 30;
+        clickOn("#sizeField").write(String.valueOf(sizeToSplitAt)).push(KeyCode.ENTER);
         clickOn("#unit" + SizeUnit.MEGABYTE.symbol());
         victim.apply(builder, onError);
         verify(onError, never()).accept(anyString());
-        verify(builder).size(eq(30 * 1000 * 1000L));
+        verify(builder).size(eq(sizeToSplitAt * KB_TO_BYTES * KB_TO_BYTES));
     }
 
     @Test
@@ -89,38 +86,45 @@ public class SplitOptionsPaneTest extends ApplicationTest {
 
     @Test
     public void saveState() {
-        clickOn("#sizeField").write("3000").push(KeyCode.ENTER);
+        String splitSizeInputVal = "3000";
+
+        clickOn("#sizeField").write(splitSizeInputVal).push(KeyCode.ENTER);
         clickOn("#unit" + SizeUnit.KILOBYTE.symbol());
         Map<String, String> data = new HashMap<>();
         victim.saveStateTo(data);
-        assertEquals("3000", data.get("size"));
+        assertEquals(splitSizeInputVal, data.get("size"));
         assertFalse(Boolean.valueOf(data.get(SizeUnit.MEGABYTE.toString())));
         assertTrue(Boolean.valueOf(data.get(SizeUnit.KILOBYTE.toString())));
     }
 
     @Test
     public void restoreState() {
+        String splitSizeInputVal = "100";
+
         SizeUnitRadio kilo = lookup("#unit" + SizeUnit.KILOBYTE.symbol()).queryAs(SizeUnitRadio.class);
         SizeUnitRadio mega = lookup("#unit" + SizeUnit.MEGABYTE.symbol()).queryAs(SizeUnitRadio.class);
         Map<String, String> data = new HashMap<>();
-        data.put("size", "100");
+        data.put("size",  splitSizeInputVal);
         data.put(SizeUnit.MEGABYTE.toString(), Boolean.TRUE.toString());
         victim.restoreStateFrom(data);
         TextInputControl field = lookup("#sizeField").queryTextInputControl();
-        assertEquals("100", field.getText());
+        assertEquals(splitSizeInputVal, field.getText());
         assertTrue(mega.isSelected());
         assertFalse(kilo.isSelected());
     }
 
     @Test
     public void reset() {
+        String splitSizeInputVal = "100";
+        long timeToWait = 2000;
+
         SizeUnitRadio kilo = lookup("#unit" + SizeUnit.KILOBYTE.symbol()).queryAs(SizeUnitRadio.class);
-        clickOn("#sizeField").write("100").push(KeyCode.ENTER);
+        clickOn("#sizeField").write(splitSizeInputVal).push(KeyCode.ENTER);
         clickOn("#unit" + SizeUnit.KILOBYTE.symbol());
         TextInputControl field = lookup("#sizeField").queryTextInputControl();
-        assertEquals("100", field.getText());
+        assertEquals(splitSizeInputVal, field.getText());
         assertTrue(kilo.isSelected());
-        WaitForAsyncUtils.waitForAsyncFx(2000, () -> victim.resetView());
+        WaitForAsyncUtils.waitForAsyncFx(timeToWait, () -> victim.resetView());
         assertEquals("", field.getText());
         assertFalse(kilo.isSelected());
     }

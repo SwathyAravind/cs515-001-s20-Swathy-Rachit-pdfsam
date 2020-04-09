@@ -30,16 +30,17 @@ public enum SizeUnit {
     MEGABYTE(DefaultI18nContext.getInstance().i18n("Megabytes"), DefaultI18nContext.getInstance().i18n("MB")) {
         @Override
         public long toBytes(int raw) {
-            return KILOBYTE.toBytes(raw) * 1000;
+            return KILOBYTE.toBytes(raw) * KB_TO_BYTES;
         }
     },
     KILOBYTE(DefaultI18nContext.getInstance().i18n("Kilobytes"), DefaultI18nContext.getInstance().i18n("KB")) {
         @Override
         public long toBytes(int raw) {
-            return raw * 1000;
+            return raw * KB_TO_BYTES;
         }
     };
-
+    /* KB_TO_BYTES : Converts Kilo bytes to bytes for the size conversion */
+    private static final long KB_TO_BYTES = 1000;
     private String name;
     private String symbol;
 
