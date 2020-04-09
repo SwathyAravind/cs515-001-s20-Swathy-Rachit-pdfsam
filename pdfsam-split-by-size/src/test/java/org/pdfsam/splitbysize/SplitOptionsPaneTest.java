@@ -50,7 +50,6 @@ public class SplitOptionsPaneTest extends ApplicationTest {
     private SplitBySizeParametersBuilder builder;
     private Consumer<String> onError;
     private SplitOptionsPane victim;
-    private static final long KB_TO_BYTES = 1000;
 
     @Before
     public void setUp() {
@@ -73,7 +72,7 @@ public class SplitOptionsPaneTest extends ApplicationTest {
         clickOn("#unit" + SizeUnit.MEGABYTE.symbol());
         victim.apply(builder, onError);
         verify(onError, never()).accept(anyString());
-        verify(builder).size(eq(sizeToSplitAt * KB_TO_BYTES * KB_TO_BYTES));
+        verify(builder).size(eq(sizeToSplitAt * SizeUnit.KB_TO_BYTES * SizeUnit.KB_TO_BYTES));
     }
 
     @Test

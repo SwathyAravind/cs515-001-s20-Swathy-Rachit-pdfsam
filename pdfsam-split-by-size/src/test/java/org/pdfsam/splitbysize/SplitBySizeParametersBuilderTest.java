@@ -41,7 +41,7 @@ import static org.mockito.Mockito.mock;
 public class SplitBySizeParametersBuilderTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    private static final long sizeToSplitAt = 30;
+    private static final long sizeToSplitAt = 120;
 
     @Test
     public void build() throws IOException {

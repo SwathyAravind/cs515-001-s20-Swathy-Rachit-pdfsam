@@ -40,7 +40,7 @@ public enum SizeUnit {
         }
     };
     /* KB_TO_BYTES : Converts Kilo bytes to bytes for the size conversion */
-    private static final long KB_TO_BYTES = 1000;
+    static final long KB_TO_BYTES = 1000;
     private String name;
     private String symbol;
 

@@ -27,12 +27,11 @@ import static org.junit.Assert.assertEquals;
  *
  */
 public class SizeUnitTest {
-    private static final long KB_TO_BYTES = 1000;
     private static final int sizeToSplitAt = 5;
 
     @Test
     public void toBytes() {
-        assertEquals(sizeToSplitAt * KB_TO_BYTES, SizeUnit.KILOBYTE.toBytes( sizeToSplitAt ));
-        assertEquals(sizeToSplitAt * KB_TO_BYTES * KB_TO_BYTES, SizeUnit.MEGABYTE.toBytes( sizeToSplitAt ));
+        assertEquals(sizeToSplitAt * SizeUnit.KB_TO_BYTES, SizeUnit.KILOBYTE.toBytes( sizeToSplitAt ));
+        assertEquals(sizeToSplitAt * SizeUnit.KB_TO_BYTES * SizeUnit.KB_TO_BYTES, SizeUnit.MEGABYTE.toBytes( sizeToSplitAt ));
     }
 }
