@@ -4,18 +4,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.Test;
 import org.pdfsam.ui.StageService;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import javafx.stage.Stage;
-
-
 import org.pdfsam.ui.StageStatus;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class WindowStatusControllerStageStatusTest extends ApplicationTest {
     private StageService service;
@@ -59,14 +57,5 @@ public class WindowStatusControllerStageStatusTest extends ApplicationTest {
         windowStatusController.setStage(victimStage);
         clickOn("show").sleep(500);
         assertTrue("Default value of stage should be maximized", victimStage.isMaximized());
-    }
-
-    @Test
-    public void restore() {
-        when(service.getLatestStatus()).thenReturn(new StageStatus(100, 100, 100, 100));
-        windowStatusController.setStage(victimStage);
-        clickOn("show").sleep(500);
-        assertEquals("Restored state of stage should be set with provided height", 100,  victimStage.getHeight(), 0.00);
-        assertEquals("Restored state of stage should be set with provided width", 100, victimStage.getWidth(), 0.00);
     }
 }
