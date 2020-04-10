@@ -7,7 +7,7 @@ import javafx.stage.Screen;
 import org.pdfsam.ui.StageStatus;
 import java.util.Optional;
 
-public class WindowStatusControllerStageStatus {
+public class WindowCtrlStageStatus {
 	private Stage stage;
 
 	public void defaultStageStatus() {

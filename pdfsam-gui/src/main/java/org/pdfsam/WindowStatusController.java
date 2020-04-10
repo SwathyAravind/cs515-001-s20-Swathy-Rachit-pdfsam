@@ -18,16 +18,15 @@
  */
 package org.pdfsam;
 
-import javax.inject.Inject;
-
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import org.pdfsam.ui.StageService;
 import org.pdfsam.ui.StageStatus;
 import org.sejda.injector.Auto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import javax.inject.Inject;
 
 /**
  * Controller for the Window status
@@ -37,7 +36,7 @@ import javafx.stage.Stage;
  */
 @Auto
 class WindowStatusController {
-    private WindowStatusControllerStageStatus windowStatusControllerStageStatus = new WindowStatusControllerStageStatus();
+    private WindowCtrlStageStatus windowCtrlStageStatus = new WindowCtrlStageStatus();
     private static final Logger LOG = LoggerFactory.getLogger(WindowStatusController.class);
     public static final String PDFSAM_DISABLE_UI_RESTORE = "org.pdfsam.disable.ui.restore";
 
@@ -48,16 +47,16 @@ class WindowStatusController {
         this.service = service;
     }
     public void setStage(Stage stage) {
-        windowStatusControllerStageStatus.setStage(stage, this);
+        windowCtrlStageStatus.setStage(stage, this);
     }
     public void initUi() {
         StageStatus latestStatus = service.getLatestStatus();
         if (!Boolean.getBoolean(PDFSAM_DISABLE_UI_RESTORE) && !StageStatus.NULL.equals(latestStatus)
                 && hasAvailableScreen(latestStatus)) {
-            windowStatusControllerStageStatus.restore(latestStatus);
+            windowCtrlStageStatus.restore(latestStatus);
             LOG.trace("Stage status restored to {}", latestStatus);
         } else {
-            windowStatusControllerStageStatus.defaultStageStatus();
+            windowCtrlStageStatus.defaultStageStatus();
             LOG.trace("Stage status set to default values");
         } }
 

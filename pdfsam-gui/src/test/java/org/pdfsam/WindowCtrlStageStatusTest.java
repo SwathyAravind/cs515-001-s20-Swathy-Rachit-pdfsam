@@ -15,10 +15,10 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class WindowStatusControllerStageStatusTest extends ApplicationTest {
+public class WindowCtrlStageStatusTest extends ApplicationTest {
     private StageService service;
     private WindowStatusController windowStatusController;
-    private WindowStatusControllerStageStatus victim;
+    private WindowCtrlStageStatus victim;
     private Stage victimStage;
 
     @Override
@@ -28,7 +28,7 @@ public class WindowStatusControllerStageStatusTest extends ApplicationTest {
 
         service = mock(StageService.class);
         windowStatusController = new WindowStatusController(service);
-        victim = new WindowStatusControllerStageStatus();
+        victim = new WindowCtrlStageStatus();
 
         Button button = new Button("show");
         button.setOnAction(a -> victimStage.show());
